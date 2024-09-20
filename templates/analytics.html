@@ -1,0 +1,148 @@
+{% extends "./base.html" %} {% block body %}
+
+<h1>Analytics</h1>
+
+{% if structured_analytics %} {% for data in structured_analytics %}
+
+<div class="card my-4">
+  <div class="card-header">
+    <h2>Placement: {{ data.placement.page_url }}</h2>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h3>Views Over Time</h3>
+
+        <div id="viewsChart{{ data.placement.id }}"></div>
+      </div>
+
+      <div class="col-md-6">
+        <h3>Clicks Over Time</h3>
+
+        <div id="clicksChart{{ data.placement.id }}"></div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-6 mb-2">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Visits by Country</h4>
+            <ul class="card-text">
+              {% for country, count in data.views_by_country.items %}
+              <li>{{ country }}: {{ count }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-2">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Referrers</h4>
+            <ul class="card-text">
+              {% for referrer, count in data.views_by_referrer.items %}
+              <li>{{ referrer }}: {{ count }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-2">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Browsers</h4>
+            <ul class="card-text">
+              {% for browser, count in data.views_by_browser.items %}
+              <li>{{ browser }}: {{ count }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-2">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Operating Systems</h4>
+            <ul class="card-text">
+              {% for os, count in data.views_by_os.items %}
+              <li>{{ os }}: {{ count }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+
+  document.addEventListener("DOMContentLoaded", function() {
+
+    var viewsOptions = {
+      chart: {
+        type: 'line',
+        height: 350,
+        zoom: {
+          enabled: false
+        }
+      },
+      series: [{
+        name: 'Views',
+        data: Object.keys({{ data.views_over_time_json | safe }}).map(key => [new Date(key).getTime(), {{ data.views_over_time_json | safe }}[key]])
+      }],
+      xaxis: {
+        type: 'datetime',
+        categories: Object.keys({{ data.views_over_time_json | safe }}).map(key => new Date(key).getTime())
+      },
+      tooltip: {
+        x: {
+          format: 'dd MMM yyyy'
+        }
+      }
+    };
+
+    var clicksOptions = {
+      chart: {
+        type: 'line',
+        height: 350,
+        zoom: {
+          enabled: false
+        }
+      },
+      series: [{
+        name: 'Clicks',
+        data: Object.keys({{ data.clicks_over_time_json | safe }}).map(key => [new Date(key).getTime(), {{ data.clicks_over_time_json | safe }}[key]])
+      }],
+      xaxis: {
+        type: 'datetime',
+        categories: Object.keys({{ data.clicks_over_time_json | safe }}).map(key => new Date(key).getTime())
+      },
+      tooltip: {
+        x: {
+          format: 'dd MMM yyyy'
+        }
+      }
+    };
+
+    var viewsChart = new ApexCharts(document.getElementById('viewsChart{{ data.placement.id }}'), viewsOptions);
+    viewsChart.render();
+
+    var clicksChart = new ApexCharts(document.getElementById('clicksChart{{ data.placement.id }}'), clicksOptions);
+    clicksChart.render();
+  });
+</script>
+
+{% endfor %} {% else %}
+<div class="empty">
+  <p class="empty-title">No Placements Found</p>
+
+  <p class="empty-subtitle text-secondary">You haven't created any placements yet.</p>
+</div>
+
+{% endif %} {% endblock %}

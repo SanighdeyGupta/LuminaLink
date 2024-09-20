@@ -1,0 +1,41 @@
+{% extends "./base.html" %} {% load static %} {% block body %}
+<div class="my-4">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Make your Lumina Link Changes Live!</div>
+    </div>
+    <div class="card-body">
+      <p>Place the following code on your page ( {{placement.page_url}} ), ideally within the <code>&lt;head&gt;</code> tag.</p>
+      <pre><code>&lt;script data-llplacement-id="{{placement.id}}" src="{{request.scheme}}://{{request.META.HTTP_HOST}}{% static 'js/llsdk.js' %}"&gt;&lt;/script&gt;</code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="my-4">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Frequently Asked Questions (FAQ) for Lumina Link Code</div>
+    </div>
+    <div class="card-body">
+      <p>Having trouble with the Lumina Link code? Check out these common issues and solutions:</p>
+      <div class="faq-section">
+        <div class="faq-item">
+          <h5>1. Why is the Lumina Link code not working on my webpage?</h5>
+          <p>There are several reasons why the Lumina Link code might not work:</p>
+          <ul>
+            <li><strong>Incorrect Placement:</strong> Ensure the script is placed within the <code>&lt;head&gt;</code> tag of your HTML document.</li>
+            <li><strong>Script Not Loading:</strong> Check if the script is being blocked by browser settings, ad blockers, or security plugins.</li>
+            <li><strong>HTTP/HTTPS Issues:</strong> Make sure the script is served over HTTPS to avoid mixed content warnings.</li>
+            <li><strong>JavaScript Errors:</strong> Inspect the browser console for any JavaScript errors that might be preventing the script from executing.</li>
+          </ul>
+        </div>
+
+        <div class="faq-item">
+          <h5>3. How do I maintain a consistent user experience with the Lumina Link code?</h5>
+          <p>Ensure you are using the latest version of the script to avoid compatibility issues.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock body %}

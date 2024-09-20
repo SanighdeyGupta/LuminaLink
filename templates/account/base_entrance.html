@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static '/css/tabler.min.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --tblr-font-sans-serif: "Inter";
+      }
+    </style>
+    <title>{% block head_title %}{% endblock head_title %}</title>
+    {% block extra_head %}{% endblock extra_head %}
+  </head>
+  <body>
+    <div class="page page-center">
+      <div class="container container-tight py-4">
+        {% block body %}
+        <div class="card card-md">
+          <div class="card-body">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
+              <div>
+                <h4 class="alert-title">{{ message.tags|title }}</h4>
+                <div class="text-secondary">{{ message|safe }}</div>
+              </div>
+              <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            {% endfor %}
+            {% block content %}{% endblock content %}
+          </div>
+        </div>
+        {% endblock body %}
+        {% block extra_body %}{% endblock extra_body %}
+      </div>
+    </div>
+    <script src="{% static '/js/tabler.min.js' %}"></script>
+  </body>
+</html>

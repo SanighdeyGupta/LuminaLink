@@ -1,0 +1,13 @@
+{% extends "account/base_manage.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}Sign Out{% endblock head_title %}
+{% block content %}
+    <h1>Sign Out</h1>
+    <p>Are you sure you want to sign out?</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {{ redirect_field }}
+        <input type="submit" value="Sign Out" class="btn btn-danger">
+    </form>
+{% endblock content %}

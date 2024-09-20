@@ -1,0 +1,18 @@
+{% extends "account/base_entrance.html" %}
+{% load crispy_forms_tags %}
+{% block head_title %}Signup{% endblock head_title %}
+{% block content %}
+    <h1>Sign Up</h1>
+    <p>Already have an account? Then please <a href="{{ login_url }}">sign in</a>.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {{ redirect_field }}
+        <div class="form-footer">
+            <input type="submit" value="Sign Up" class="btn btn-primary w-100">
+        </div>
+    </form>
+    {% if SOCIALACCOUNT_ENABLED %}
+        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+    {% endif %}
+{% endblock content %}

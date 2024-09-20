@@ -1,0 +1,13 @@
+{% extends "account/base_reauthenticate.html" %}
+{% load crispy_forms_tags %}
+{% block reauthenticate_content %}
+    <p>Enter your password:</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        {{ redirect_field }}
+        <div class="form-footer">
+            <input type="submit" value="Confirm" class="btn btn-primary w-100">
+        </div>
+    </form>
+{% endblock %}

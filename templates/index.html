@@ -1,0 +1,99 @@
+{% extends "./base.html" %} {% load static %} {% block body %}
+<div class="py-2">
+  <div class="row">
+    <div class="col-md-6 p-4">
+      <h1 class="display-5 fw-bold">People are not the same,<br />so why show them the same content?</h1>
+      <a href="{% url 'placements' %}" class="btn btn-lg btn-orange">Create Placement</a>
+    </div>
+    <div class="col-md-6 p-4">
+      <h2>You:</h2>
+      <div class="row">
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Operating System</h5>
+              <p id="os" class="card-text">Loading...</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Country</h5>
+              <p id="country" class="card-text">Loading...</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Device</h5>
+              <p id="device" class="card-text">Loading...</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Time Zone</h5>
+              <p id="timezone" class="card-text">Loading...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="my-4">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">About Lumina Link</div>
+    </div>
+    <div class="card-body">
+      <p>Lumina Link is a powerful personalization engine that helps you deliver tailored content to your users based on their unique characteristics and behaviors. By leveraging Lumina Link, you can ensure that your visitors see the most relevant and engaging content, leading to higher engagement and conversion rates.</p>
+      <h5>Why Personalization Matters</h5>
+      <p>People are not the same, so why show them the same content? Personalized content helps in creating a better user experience by showing users what they are most likely to be interested in. This not only enhances user satisfaction but also improves retention and boosts engagement.</p>
+      <h5>Parameters Used for Personalization</h5>
+      <p>Below are the key parameters Lumina Link takes into account to personalize content:</p>
+      <ul>
+        <li><strong>Browser:</strong> Identifies the browser being used (e.g., Chrome, Firefox, Safari, Edge, Other).</li>
+        <li><strong>Traffic Source:</strong> Determines how the user arrived (e.g., Search Engine, Social Media, Direct Traffic, Other).</li>
+        <li><strong>OS:</strong> Detects the operating system of the user (e.g., Windows, MacOS, Linux, iOS, Android, Chrome OS).</li>
+        <li><strong>Country:</strong> Identifies the user's country (e.g., United States, Canada, United Kingdom, etc.).</li>
+        <li><strong>Device:</strong> Recognizes the type of device being used (e.g., Mobile, Desktop, Tablet).</li>
+        <li><strong>First Time Visitor:</strong> Determines if the visitor is new (True/False).</li>
+        <li><strong>Returning Visitor:</strong> Determines if the visitor has been to your site before (True/False).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+  $(document).ready(function () {
+    // Fetch the user's country and timezone
+    $.getJSON("https://ipapi.co/json/", function (data) {
+      $("#country").text(data.country_name);
+      $("#timezone").text(data.timezone);
+    }).fail(function () {
+      $("#country").text("Unable to detect");
+      $("#timezone").text("Unable to detect");
+    });
+
+    // Get the operating system
+    var os = "Unknown OS";
+    if (navigator.appVersion.indexOf("Win") != -1) os = "Windows";
+    if (navigator.appVersion.indexOf("Mac") != -1) os = "MacOS";
+    if (navigator.appVersion.indexOf("X11") != -1) os = "UNIX";
+    if (navigator.appVersion.indexOf("Linux") != -1) os = "Linux";
+    $("#os").text(os);
+
+    // Get the device type
+    var device = "Desktop";
+    if (/Mobi|Android/i.test(navigator.userAgent)) {
+      device = "Mobile";
+    }
+    $("#device").text(device);
+  });
+</script>
+{% endblock body %}

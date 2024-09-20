@@ -1,0 +1,70 @@
+{% extends "account/base_manage_email.html" %}
+{% load crispy_forms_tags %}
+{% load allauth i18n %}
+{% block head_title %}
+    {% trans "Email Addresses" %}
+{% endblock head_title %}
+{% block content %}
+    {% element h1 %}
+        {% trans "Email Addresses" %}
+    {% endelement %}
+    {% if emailaddresses %}
+        <p>{% trans 'The following email addresses are associated with your account:' %}</p>
+        {% url 'account_email' as email_url %}
+        {% element form form=form action=email_url method="post" %}
+            {% slot body %}
+                {% csrf_token %}
+                {% for radio in emailaddress_radios %}
+                    {% with emailaddress=radio.emailaddress %}
+                        {% element field type="radio" checked=radio.checked name="email" value=emailaddress.email id=radio.id %}
+                            {% slot label %}
+                                {{ emailaddress.email }}
+                                {% if emailaddress.verified %}
+                                    <span class="badge bg-success">Verified</span>
+                                {% else %}
+                                <span class="badge bg-warning">Unverified</span>
+                                {% endif %}
+                                {% if emailaddress.primary %}
+                                    <span class="badge bg-blue">Primary</span>
+                                {% endif %}
+                            {% endslot %}
+                        {% endelement %}
+                    {% endwith %}
+                {% endfor %}
+            {% endslot %}
+            {% slot actions %}
+                <button name="action_primary" type="submit" class="btn btn-primary">Make Primary</button>
+                <button name="action_send" type="submit" class="btn btn-secondary">Re-send Verification</button>
+                <button name="action_remove" type="submit" class="btn btn-danger">Remove</button>
+            {% endslot %}
+        {% endelement %}
+    {% else %}
+        {% include "account/snippets/warn_no_email.html" %}
+    {% endif %}
+    {% if can_add_email %}
+    <div class="col-md-6">
+        <h2 class="mt-4">Add Email Address</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            {{ redirect_field }}
+            <input type="submit" value="Add Email" name="action_add" class="btn btn-primary">
+        </form>
+    </div>
+    {% endif %}
+{% endblock content %}
+{% block extra_body %}
+    <script type="text/javascript">
+(function() {
+  var message = "{% trans 'Do you really want to remove the selected email address?' %}";
+  var actions = document.getElementsByName('action_remove');
+  if (actions.length) {
+    actions[0].addEventListener("click", function(e) {
+      if (! confirm(message)) {
+        e.preventDefault();
+      }
+    });
+  }
+})();
+    </script>
+{% endblock extra_body %}

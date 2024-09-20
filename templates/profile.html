@@ -1,0 +1,17 @@
+{% extends "./base.html" %}
+
+{% block body %}
+<h1>Profile</h1>
+<div class="card">
+    <div class="card-body">
+        <h2>{{ user.get_full_name }}</h2>
+        <p>Username: {{ user.username }}</p>
+        <p>Email: {{ user.email }}</p>
+        <p>Last login: {{ user.last_login }}</p>
+    </div>
+    <div class="card-footer">
+        <a class="btn btn-primary" href="{% url "account_email" %}">Manage Emails</a>
+        <a class="btn btn-danger" href="{% url "account_logout" %}">Logout</a>
+    </div>
+</div>
+{% endblock body %}
